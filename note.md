@@ -5,6 +5,8 @@
 - [State](#state)
   - [제어 컴포넌트(Controlled Component)](#제어-컴포넌트controlled-component)
   - [비제어 컴포넌트(Uncontrolled Component)](#비제어-컴포넌트uncontrolled-component)
+- [Props](#props)
+  - [PropTypes](#proptypes)
 
 # React 기초 사용법
 ```html
@@ -63,8 +65,8 @@
 ```
 
 # State
-- 데이터를 저장하는 공간?
-    일반 자바스크립트를 사용한 브라우저의 경우 노드정보가 바뀔때마다 노드트리를 처음부터 다시 생성하는 반면, 리액트는 가상돔(ReactDOM)을 사용하여 보이는 부분만 수정해서 보여주고 모든 업데이트가 끝나면 일괄로 합쳐서 실제 돔에 전달한다.(렌더트리 단계의 최적화)
+- 컴포넌트 안에서 관리하는 객체로 뷰에 렌더링 되어있는 컴포넌트 데이터를 제어/관리하는 데 사용한다.
+- 일반 자바스크립트를 사용한 브라우저의 경우 노드정보가 바뀔때마다 노드트리를 처음부터 다시 생성하는 반면, 리액트는 가상돔(ReactDOM)을 사용하여 보이는 부분만 수정해서 보여주고 모든 업데이트가 끝나면 일괄로 합쳐서 실제 돔에 전달한다.(렌더트리 단계의 최적화) 해당 부분을 State를 활용하여 쉽게 처리할 수 있다.
 
 ```javascript
 const root = document.getElementById("root");
@@ -81,7 +83,7 @@ const App = () => (
 );
 ReactDOM.render(<App />, root);
 ```
-- 위와 같이 onClick arrow method에서 counter 값을 re-rendering 해도 되지만, 아래와 같이 state를 활용하여 처리하는 것이 일반적(동일하게 동작) 
+- 위와 같이 onClick 함수에서 counter 값을 변경 후 render 함수를 통해 re-rendering 해도 되지만, 아래와 같이 State를 활용하여 처리하는 것이 일반적(위, 아래 동일하게 동작) 
 
 ```javascript
 const root = document.getElementById("root");
@@ -120,7 +122,7 @@ const App = () => {
     );
 };
 ```
-- jsx에서 input과 같은 component의 경우 기본적으로 value 값에 직접적으로 접근 할 수 없다. 하여 해당 부분을 state/ref를 활용해 value 값에 접근 및 관리가 가능하다.
+- jsx에서 input과 같은 컴포넌트 경우 기본적으로 value 값에 직접적으로 접근 할 수 없다. 하여 해당 부분을 state(제어)/ref(비제어)를 활용해 value 값에 접근 및 관리가 가능하다.
 - 제어 컴포넌트의 경우 실시간으로 값을 제어하고 관리해야되는 경우에 사용한다.(onChange + state function)
 
 ## 비제어 컴포넌트(Uncontrolled Component)
@@ -144,8 +146,77 @@ const App = () => {
     );
 };
 ```
-- ref를 통해 component에 접근하는 형태로 vanilla js와 유사.(input 값 입력 후 button 클릭하여 form submit할 때 값을 가져옴)
+- ref를 통해 컴포넌트에 접근하는 형태로 vanilla js와 유사하다.(input 값 입력 후 button 클릭하여 form submit할 때 값을 가져옴)
 - form submit 시 실행되는 함수 내에서 ref를 통해 값을 가져올 수 있다.
 - 불필요한 re-rendering을 줄이고 submit 시에만 값이 필요한 경우에 사용한다.
 
-**!! prop / state의 차이 이해 필요 !!**
+# Props
+- 데이터, 이벤트 핸들러를 상위 컴포넌트에서 하위 컴포넌트로 매개변수처럼 전달하는 데 사용한다.
+```javascript
+const Btn = ({ text, onClick }) => {
+    return (
+    <button
+        style={{
+        backgroundColor: "tomato",
+        color: "white",
+        padding: "10px 20px",
+        borderRadius: 10,
+        }}
+        onClick={onClick}
+    >
+        {text}
+    </button>
+    );
+};
+const MemorizedBtn = React.memo(Btn);
+const App = () => {
+    const [value, setValue] = React.useState("Save Changes");
+    const changeValue = () => setValue("Revert Changes");
+    return (
+    <div>
+        <Btn text={value} onClick={changeValue} />
+        <MemorizedBtn text="Continue" />
+    </div>
+    );
+};
+```
+- 위와 같이 상위 컴포넌트(App-Custom Syntax)에서 하위 컴포넌트(Btn-props)로 데이터를 전달한다.
+- 매개변수 props의 경우 정의된 Custom Syntax(text, onClick)를 명시하여 사용하는 것도 가능하다.
+  - ex) (props) -> ({ text, onClick }) // 이와 같이 사용하게 될 경우 props.text -> text로 표현 가능하다.
+  - Btn 컴포넌트 props 중 이벤트 함수명과 동일한 onClick을 넘기더라도 html element에 이벤트 체인을 연결해주지 않으면 이벤트가 발생하지 않는다.
+- 추가적으로 수많은 컴포넌트 중 re-rendering이 필요없는(변경 가능성이 없는) 컴포넌트의 경우 memo 함수를 통해 re-rendering 대상에서 제외할 수 있다.(추후 개발 시 수많은 컴포넌트 re-rendering 문제로 속도저하가 발생할 수 있음.)
+
+## PropTypes
+- asdmlf
+- 앞서 PropTypes 사용을 위해 아래 스크립트 설치가 필요하다
+  - `<script src="https://unpkg.com/prop-types@15.7.2/prop-types.js"></script>`
+```javascript
+const Btn = ({ text, fontSize = 14 }) => {
+    return (
+    <button
+        style={{
+        backgroundColor: "tomato",
+        color: "white",
+        padding: "10px 20px",
+        borderRadius: 10,
+        fontSize,
+        }}
+    >
+        {text}
+    </button>
+    );
+};
+// props의 타입/필수여부 등을 지정하여 오류를 사전 방지한다.
+Btn.propTypes = {
+    text: PropTypes.string.isRequired,
+    fontSize: PropTypes.number,
+};
+const App = () => {
+    return (
+    <div>
+        <Btn text="Save Changes" fontSize={18} />
+        <Btn text="Continue" />
+    </div>
+    );
+};
+```
