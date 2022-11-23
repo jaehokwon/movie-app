@@ -41,7 +41,7 @@
     function Title() {
         return (
             <h3 id="title" onMouseEnter={() => console.log("mouse enter")}>
-            Hello I'm a title
+            Hello Im a title
         </h3>
         );
     }
@@ -187,7 +187,7 @@ const App = () => {
 - 추가적으로 수많은 컴포넌트 중 re-rendering이 필요없는(변경 가능성이 없는) 컴포넌트의 경우 memo 함수를 통해 re-rendering 대상에서 제외할 수 있다.(추후 개발 시 수많은 컴포넌트 re-rendering 문제로 속도저하가 발생할 수 있음.)
 
 ## PropTypes
-- asdmlf
+- 컴포넌트 Props의 타입 및 필수여부 등을 지정하여 오류를 사전 방지한다.
 - 앞서 PropTypes 사용을 위해 아래 스크립트 설치가 필요하다
   - `<script src="https://unpkg.com/prop-types@15.7.2/prop-types.js"></script>`
 ```javascript
@@ -206,7 +206,7 @@ const Btn = ({ text, fontSize = 14 }) => {
     </button>
     );
 };
-// props의 타입/필수여부 등을 지정하여 오류를 사전 방지한다.
+// props의 타입/필수여부 등 지정
 Btn.propTypes = {
     text: PropTypes.string.isRequired,
     fontSize: PropTypes.number,
