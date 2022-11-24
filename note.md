@@ -7,6 +7,9 @@
   - [비제어 컴포넌트(Uncontrolled Component)](#비제어-컴포넌트uncontrolled-component)
 - [Props](#props)
   - [PropTypes](#proptypes)
+- [React 프로젝트 생성](#react-프로젝트-생성)
+- [Effect](#effect)
+  - [Clean-up](#clean-up)
 
 # React 기초 사용법
 ```html
@@ -190,6 +193,7 @@ const App = () => {
 - 컴포넌트 Props의 타입 및 필수여부 등을 지정하여 오류를 사전 방지한다.
 - 앞서 PropTypes 사용을 위해 아래 스크립트 설치가 필요하다
   - `<script src="https://unpkg.com/prop-types@15.7.2/prop-types.js"></script>`
+  - `npm install prop-types`
 ```javascript
 const Btn = ({ text, fontSize = 14 }) => {
     return (
@@ -219,4 +223,78 @@ const App = () => {
     </div>
     );
 };
+```
+
+# React 프로젝트 생성
+```bash
+npx create-react-app movie-app
+cd movie-app
+npm start
+```
+public/index.html
+ㄴ src/index.js
+    ㄴ src/App.js -> src/App.module.css
+        ㄴ src/{Components}.js -> src/{Componets}.module.css
+
+# Effect
+- 코드의 실행 시점을 Dependency List에 속한 값이 변경될 경우에만 실행되도록 관리하기 위해 사용한다.
+- vs memo
+  - memo는 컴포넌트가 불필요한 상황에 re-rendering 되지 않도록 하는 역할을 하는 반면 effect는 컴포넌트에 어떤 변화가 일어났을 때(ex, state 값이 변경된 경우) 특정 함수를 실행시켜주는 Hook으로 사용 용도가 다르다.
+```javascript
+function App() {
+  const [counter, setValue] = useState(0);
+  const [keyword, setKeyword] = useState("");
+  const onClick = () => setValue((prev) => prev + 1);
+  const onChange = (event) => setKeyword(event.target.value);
+
+  // ({EffectCallback}, {Dependency List})
+  useEffect(() => {
+    console.log("CALL THE API"); // dependency가 없기때문에 최초 로드 시 1회만 함수 호출
+  }, []);
+  useEffect(() => {
+    console.log("I run when 'keyword' changes."); // keyword 변수가 변경될 때 마다 함수 호출
+  }, [keyword]);
+  useEffect(() => {
+    console.log("I run when 'counter' changes."); // counter 변수가 변경될 때 마다 함수 호출
+  }, [counter]);
+  useEffect(() => {
+    console.log("I run when keyword or counter changes."); // keyword 또는 counter 변수가 변경될 때 마다 함수 호출
+  }, [keyword, counter]);
+  return (
+    <div>
+      <input
+        value={keyword}
+        onChange={onChange}
+        type="text"
+        placeholder="Search here..."
+      ></input>
+      <h1>{counter}</h1>
+      <button onClick={onClick}>click me</button>
+    </div>
+  );
+}
+```
+
+## Clean-up
+- Effect를 위한 추가적인 Clean-up 매커니즘으로 컴포넌트가 마운트 해제되는 때에 Clean-up이 실행된다.
+- 크게 사용되는 때는 없지만, 구독(Subscription)의 경우 추가/제거를 위한 코드의 결합도가 높기 때문에 해당 로직을 가까이 묶어둘 수 있게 할 수 있다.(구독의 추가/제거를 모두 하나의 effect로 구성하여 관리하는데 용이)
+```javascript
+function Hello() {
+  useEffect(() => {
+    console.log("created :)"); // 마운트 생성 시 동작
+    return () => console.log("destroyed :("); // 마운트 해제 시 동작
+  }, []);
+  return <h1>Hello</h1>;
+}
+
+function App() {
+  const [showing, setShowing] = useState(true);
+  const onClick = () => setShowing((current) => !current);
+  return (
+    <div>
+      <button onClick={onClick}>{showing ? "Hide" : "Show"}</button>
+      {showing ? <Hello /> : null}
+    </div>
+  );
+}
 ```
