@@ -12,4 +12,3 @@ function Loading() {
 }
 
 export default Loading;
-//#c571fe

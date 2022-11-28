@@ -12,3 +12,5 @@ YTS API를 통해 영화 목록 조회
 - [x] 영화 선택 시 상세 페이지 이동
 
 ## 웹서버 구현(nginx, react)
+- [Web page link](https://movie-app.kaylabs.dev)
+`docker-compose up -d`
