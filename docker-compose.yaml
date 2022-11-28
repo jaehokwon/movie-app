@@ -2,6 +2,7 @@ version: '3.3'
 services:
   movie-app:
     build:
-      dockerfile: Dockerfile-prod
+      context: .
+      dockerfile: ./Dockerfile-prod
     ports:
-      - '80:80'
+      - '10001:80'
