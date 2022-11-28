@@ -10,6 +10,10 @@
 - [React 프로젝트 생성](#react-프로젝트-생성)
 - [Effect](#effect)
   - [Clean-up](#clean-up)
+- [React Router](#react-router)
+- [Publishing](#publishing)
+- [React Icon 사용하기](#react-icon-사용하기)
+- [loader-spinner](#loader-spinner)
 
 # React 기초 사용법
 ```html
@@ -86,7 +90,7 @@ const App = () => (
 );
 ReactDOM.render(<App />, root);
 ```
-- 위와 같이 onClick 함수에서 counter 값을 변경 후 render 함수를 통해 re-rendering 해도 되지만, 아래와 같이 State를 활용하여 처리하는 것이 일반적(위, 아래 동일하게 동작) 
+- 위와 같이 onClick 함수에서 counter 값을 변경 후 render 함수를 통해 re-rendering 해도 되지만, 아래와 같이 State를 활용하여 처리하는 것이 일반적(위, 아래 동일하게 동작)
 
 ```javascript
 const root = document.getElementById("root");
@@ -231,10 +235,11 @@ npx create-react-app movie-app
 cd movie-app
 npm start
 ```
-public/index.html
-ㄴ src/index.js
-    ㄴ src/App.js -> src/App.module.css
-        ㄴ src/{Components}.js -> src/{Componets}.module.css
+- public/index.html
+  - ㄴ src/index.js
+    - ㄴ src/App.js -> src/App.module.css
+      - ㄴ src/{Components}.js -> src/{Componets}.module.css
+      - ㄴ src/{Components}.js -> src/{Componets}.module.css
 
 # Effect
 - 코드의 실행 시점을 Dependency List에 속한 값이 변경될 경우에만 실행되도록 관리하기 위해 사용한다.
@@ -298,3 +303,51 @@ function App() {
   );
 }
 ```
+
+# React Router
+- React Router 설치
+  - `npm install react-router-dom`
+
+```javascript
+<BrowserRouter>
+  <Routes>
+    <Route path="/" element={<Home />} />
+    <Route path="/movie/:id" element={<Detail />} />
+  </Routes>
+</BrowserRouter>
+```
+
+- BrowserRouter : HTML5를 지원하는 브라우저의 주소를 감지하는 역할
+  - ㄴ Routes : 규칙이 일치하는 Route를 찾아서 컴포넌트를 렌더링하는 역할
+    - ㄴ Route : 화면에 렌더링 할 컴포넌트를 지정
+
+- Link
+  ```javascript
+  <Link to={`/movie/${id}`}>{title}</Link>
+  ```
+  - 원래 링크 이동 시 "a"태그를 사용하여 이동하는데, "a"태그의 경우 새로고침되어 페이지를 불러온다.
+  - Link 컴포넌트의 경우 History API를 통해 브라우저 주소의 경로만 바꾸는 기능이 내장되어 있다.
+
+- useParams()
+  ```javascript
+  <Route path="/detail/:id" element={<Detail />} />
+  ...
+  import { useParams } from "react-router-dom";
+  function Detail() {
+    // /detail/123 -> id=123
+    const { id } = useParams();
+  }
+  ```
+  - URL 파라미터로 넘겨받은 값을 불러와서 활용할 수 있다.
+
+# Publishing
+`npm run build`
+/build
+
+# React Icon 사용하기
+`npm install react-icons`
+`https://react-icons.github.io/react-icons/search`
+
+# loader-spinner
+`npm install react-spinners`
+`https://www.davidhu.io/react-spinners/`

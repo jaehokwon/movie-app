@@ -1,0 +1,31 @@
+.container {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  padding-top: 100px;
+}
+
+.movies {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(400px, 1fr));
+  grid-gap: 35px;
+  padding: 50px;
+  width: 80%;
+  height: 100%;
+  padding-top: 70px;
+  justify-content: center;
+}
+
+@media screen and (max-width: 1300px) {
+  .movies {
+    grid-template-columns: repeat(2, minmax(280px, 1fr));
+    width: 100%;
+  }
+}
+
+@media screen and (max-width: 650px) {
+  .movies {
+    grid-template-columns: repeat(1, minmax(280px, 1fr));
+    width: 100%;
+  }
+}
